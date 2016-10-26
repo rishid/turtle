@@ -1,15 +1,3 @@
-# TODO
-
-[] write unit tests
-[] write a benchmark
-[] clean up cmake
-[x] finish readme
-[x] remove warnings
-[x] add comments
-[x] add art tree
-[x] add help command
-
-
 # Turtle library
 
 Turtle library is a command line interpreter to rapidly build simple shells. Its typical use can be for testing, debugging and interacting with server daemons. It allows you to call C functions with different arguments just by passing strings to the library. The library will parse the string and call the command's function with the appropriate arguments.
