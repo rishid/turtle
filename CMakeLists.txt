@@ -24,6 +24,9 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS_DEBUG}")
 
 #add_definitions("-DGIT_VERSION=${GIT_VERSION}")
 
+# run tests but also show terminal output
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --verbose)
+
 macro(add_sources)
     file (RELATIVE_PATH _relPath "${CMAKE_SOURCE_DIR}/src" "${CMAKE_CURRENT_SOURCE_DIR}")
     foreach (_src ${ARGN})
@@ -53,6 +56,8 @@ macro(add_includes)
         set (INCLUDES ${INCLUDES} PARENT_SCOPE)
     endif()
 endmacro()
+
+enable_testing()
 
 add_subdirectory(deps)
 add_subdirectory(src)
