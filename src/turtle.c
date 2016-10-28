@@ -542,8 +542,6 @@ bool turtle_execute(const char *line)
         return false;
     }
 
-    printf("execute %s\n", line);
-
     // Copy input line to be used for strtok
     char *line_dup = strdup(line);
     char *line_save = NULL;
