@@ -16,3 +16,7 @@ add_executable(turtle_test turtle_test.c)
 target_link_libraries(turtle_test turtle ${LIBFFI_LIBRARIES} art)
 set_target_properties(turtle_test PROPERTIES COMPILE_FLAGS "-Wno-unused-parameter")
 add_test(NAME TurtleTest COMMAND turtle_test)
+
+add_executable(turtle_bm turtle_bm.c)
+target_link_libraries(turtle_bm turtle ${LIBFFI_LIBRARIES} art)
+set_target_properties(turtle_bm PROPERTIES COMPILE_FLAGS "-Wno-unused-parameter")
