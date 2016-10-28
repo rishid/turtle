@@ -132,7 +132,7 @@ static bool _parse_specifier(const char **p, struct arg_t *arg)
             fprintf(stderr, "turtle: invalid format specifier (%c)\n", *s);
             return false;
     }
-    
+
     s++;
     *p = s;
 
@@ -210,7 +210,7 @@ static bool _parse_specifiers(const char *format, struct arg_t args[TURTLE_MAX_C
         }
     }
 
-    return 0;
+    return true;
 }
 
 static bool _create_arg_metadata(turtle_cmd_t *cmd)
@@ -233,7 +233,10 @@ static bool _create_arg_metadata(turtle_cmd_t *cmd)
             return false;
         }
 
-        _parse_specifiers(cmd->parameters, cmd->args);
+        if (!_parse_specifiers(cmd->parameters, cmd->args))
+        {
+            return false;
+        }
     }
 
     return true;
@@ -263,7 +266,7 @@ bool turtle_init(turtle_cmd_list_t list)
     {
       return false;
     }
-    
+
     turtle_cmd_t *cmd = &list[0];
 
     // for each command, build the meta data about each argument based
@@ -302,9 +305,9 @@ bool turtle_init(turtle_cmd_list_t list)
 }
 
 bool turtle_deinit(void)
-{    
+{
     int atd = art_tree_destroy(&_tree);
-    
+
     for (turtle_cmd_t *p = _table.commands; p && p->name != NULL; p++)
     {
         if (p->arg_count)
@@ -312,7 +315,7 @@ bool turtle_deinit(void)
           free(p->args);
         }
     }
-    
+
     return (atd == 0);
 }
 
@@ -440,7 +443,7 @@ static bool _execute_cmd_with_args(const turtle_cmd_t *cmd, char *param_str)
     for (int i = 0; i < cmd->arg_count; ++i)
     {
         switch (cmd->args[i].type)
-        {             
+        {
             case ARG_BOOL:
             {
                 args[i] = &ffi_type_uint8;
@@ -538,7 +541,7 @@ bool turtle_execute(const char *line)
     {
         return false;
     }
-    
+
     printf("execute %s\n", line);
 
     // Copy input line to be used for strtok
@@ -550,7 +553,7 @@ bool turtle_execute(const char *line)
 
     // Search for command in table
     const turtle_cmd_t *cmd = _find_command(name);
-    
+
     if (cmd)
     {
         //printf("%s found cmd\n", cmd->name);
