@@ -4,10 +4,10 @@
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
  *
- * @brief private structures and macros for turtle library
+ * @brief API level tests for turtle library
  *
  */
- 
+
 #include "turtle.h"
 #include "turtle_private.h"
 
@@ -30,24 +30,6 @@ static void _no_params(void)
   _flag = true;
 }
 
-static void print1(int x)
-{
-    printf("enter %s\n", __FUNCTION__);
-    printf("x = %d\n", x);
-}
-
-static void print2(int x, int y)
-{
-    printf("enter %s\n", __FUNCTION__);
-    printf("x = %d, y = %d\n", x, y);
-}
-
-static void print3(const char *a, int b, bool c)
-{
-    //printf("enter %s\n", __FUNCTION__);
-    //printf("a = %s b = %d c = %d\n", a, b, c);
-    p3_call++;
-}
 
 static void print5(int a0, int a1, int a2,
                    int a3,int a4,int a5,int a6,int a7,int a8,int a9,int a10,
@@ -57,7 +39,7 @@ static void print5(int a0, int a1, int a2,
     p3_call++;
 }
 
-static void _try_bool1(bool b)
+static void _bool1(bool b)
 {
     _values[0].boolarg = b;
 }
@@ -69,12 +51,12 @@ static void _bcdfIs(bool b, char c, int64_t d, double f, uint32_t I, const char 
     _values[2].longlongarg  = d;
     _values[3].doublearg    = f;
     _values[4].ipaddrarg    = I;
-    _values[5].pchararg     = s;    
+    _values[5].pchararg     = s;
 }
 
 static turtle_cmd_list_t _cmds = {
     TURTLE_CMD_NP("_no_params", NULL, _no_params),
-    TURTLE_CMD("try_bool", "%b", NULL, _try_bool1),
+    TURTLE_CMD("bool1", "%b", NULL, _bool1),
     TURTLE_CMD("bcdfIs", "%b %c %d %f %I %s", NULL, _bcdfIs),
 #if 0
     { "print1", "%d", "help1", print1 },
@@ -95,12 +77,12 @@ CTEST_SETUP(suite) {
     ASSERT_TRUE(turtle_init(_cmds));
 }
 
-CTEST_TEARDOWN(suite) {    
+CTEST_TEARDOWN(suite) {
     ASSERT_TRUE(turtle_deinit());
 }
 
 CTEST2(suite, no_params) {
-    //turtle_cmd_list_t cmds = {    
+    //turtle_cmd_list_t cmds = {
     //  TURTLE_CMD_NP("_no_params", NULL, _no_params),
     //  { NULL, },
     //};
@@ -110,12 +92,17 @@ CTEST2(suite, no_params) {
     ASSERT_TRUE(_flag);
 }
 
-CTEST2(suite, bool1) {    
-    ASSERT_TRUE(turtle_execute("try_bool t"));
+CTEST2(suite, bool1) {
+    ASSERT_TRUE(turtle_execute("bool1 t"));
     ASSERT_TRUE(_values[0].boolarg);
 }
 
-CTEST2(suite, all_types) {    
+CTEST2(suite, bad_cmd) {
+    ASSERT_FALSE(turtle_execute("foobar"));
+    ASSERT_FALSE(turtle_execute("foobar t"));
+}
+
+CTEST2(suite, all_types) {
     ASSERT_TRUE(turtle_execute("bcdfIs f a 54321 3.14 1.2.3.4 'my cool string'"));
     ASSERT_FALSE(_values[0].boolarg);
     ASSERT_EQUAL('a', _values[1].chararg);
@@ -123,6 +110,24 @@ CTEST2(suite, all_types) {
     ASSERT_EQUAL(3.14, _values[3].doublearg);
     ASSERT_EQUAL(0x04030201, _values[4].ipaddrarg);
     ASSERT_STR("my cool string", _values[5].pchararg);
+}
+
+CTEST(suite, bad_param_str_0) {
+    turtle_cmd_list_t cmds = {
+        TURTLE_CMD("foobar", "%", NULL, _no_params),
+        { NULL, },
+    };
+    ASSERT_FALSE(turtle_init(cmds));
+    ASSERT_TRUE(turtle_deinit());
+}
+
+CTEST(suite, invalid_param_specifier) {
+    turtle_cmd_list_t cmds = {
+        TURTLE_CMD("foobar", "%z", NULL, _no_params),
+        { NULL, },
+    };
+    ASSERT_FALSE(turtle_init(cmds));
+    ASSERT_TRUE(turtle_deinit());
 }
 
 int main(int argc, const char *argv[])
@@ -144,7 +149,7 @@ int main()
     turtle_execute("try_bool f");
     turtle_execute("try_bool 1");
     turtle_execute("try_bool w");
-    
+
     turtle_execute("help");
 
 #if 0
