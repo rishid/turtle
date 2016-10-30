@@ -2,7 +2,7 @@
 
 Turtle library is a command line interpreter to rapidly build simple shells. Its typical use can be for testing, debugging and interacting with server daemons. It allows you to call C functions with different arguments just by passing strings to the library. The library will parse the string and call the command's function with the appropriate arguments.
 
-Its goal is provide a rapid way to create a simple and safe shell interface to daemons. It can very easily be wrapped to accept commands over a localhost-bound tcp/udp socket to remotely execute commands. It uses libffi to dynamically build a callstack and call methods with the the arguments provided.
+Its goal is provide a rapid way to create a simple and safe shell interface to daemons. It can very easily be wrapped to accept commands over a localhost-bound tcp/udp socket to remotely execute commands. It uses libffi to dynamically build a callstack and call methods with the the arguments provided and uses an adaptive radix tree for fast and efficient lookup of commands.
 
 ## Example
 ```c
@@ -80,7 +80,7 @@ There are a lot of features I want to add to the library over time
 - [ ] Add support for switch params (e.g. '-n %d')
 - [ ] Add support for key=value params
 - [ ] Allow switch and key=value params to be in entered in any order
-
+- [ ] Benchmark radix tree vs linear search for small set of commands
 
 ## License
 
