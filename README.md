@@ -2,7 +2,7 @@
 
 Turtle library is a command line interpreter to rapidly build simple shells. Its typical use can be for testing, debugging and interacting with server daemons. It allows you to call C functions with different arguments just by passing strings to the library. The library will parse the string and call the command's function with the appropriate arguments.
 
-Its goal is provide a rapid way to create a simple and safe shell interface to daemons. It can very easily be wrapped to accept commands over a localhost-bound tcp/udp socket to remotely execute commands. It uses libffi to dynamically build a callstack and call methods with the the arguments provided and uses an adaptive radix tree for fast and efficient lookup of commands.
+Its goal is to provide a rapid way to create a simple and safe shell interface to daemons. It can very easily be wrapped to accept commands over a localhost-bound tcp/udp socket to remotely execute commands. It uses libffi to dynamically build a callstack and call methods with the arguments provided and uses an adaptive radix tree for fast and efficient lookup of commands.
 
 ## Example
 ```c
@@ -65,7 +65,7 @@ int main()
 This project requires CMake to build. libffi is required but a copy is maintained in the repository as of now. I have wrapped the CMake build calls in a Makefile for ease.
 
 ```
-git clone https://github.com/rishid/turtle
+git clone --recurse-submodules https://github.com/rishid/turtle
 cd turtle
 make
 make test

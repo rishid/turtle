@@ -1,0 +1,3 @@
+[submodule "deps/libart"]
+	path = deps/libart
+	url = https://github.com/armon/libart.git
